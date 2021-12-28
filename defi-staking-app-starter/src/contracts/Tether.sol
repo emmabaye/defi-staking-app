@@ -3,7 +3,7 @@ pragma solidity ^0.5.0;
 contract Tether {
     string public name = 'MockTether';
     string public symbol = 'mUSDT';
-    uint256 public totalSupply = 1000000 * 1000000000000000000;//1 million tokens
+    uint256 public totalSupply = 9000000 * 1000000000000000000;//1 million tokens
     uint8 public decimals = 18;
 
     event Transfer(
@@ -33,17 +33,17 @@ contract Tether {
         return true;
     }
 
-    function approve(address _spender, uint256 _value) public returns (bool success) {
-        allowance[msg.sender][_spender] = _value;
+    function approve(address _spender, uint256 _value) public  {
+        // allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
     }
 
-    function transferFrom(address _from, address _to, uint256 _value) public returns(bool success) {
-        require(_value >= balanceOf[_from]);
-        require(_value >= allowance[_from][msg.sender]);
+    function transferFrom(address _from, address _to, uint256 _value) public payable returns(bool success) {
+        require(_value <= balanceOf[_from], 'Insufficient balance');
+        // require(_value <= allowance[_from][msg.sender], 'allowance error');
         balanceOf[_to] += _value;
         balanceOf[_from] -= _value;
-        allowance[msg.sender][_from] -= _value;
+        // allowance[msg.sender][_from] -= _value;
         emit Transfer(_from, _to, _value);
         return true;
     }
